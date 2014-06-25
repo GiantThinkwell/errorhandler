@@ -9,9 +9,21 @@
  * Module dependencies.
  */
 
-var accepts = require('accepts')
+var http = require('http');
+var accepts = require('accepts');
+var handlebars = require('handlebars');
 var escapeHtml = require('escape-html');
 var fs = require('fs');
+
+
+/**
+ * Register a helper to allow for writing raw values.
+ * This is only useful when writing the css to the template.
+ */
+handlebars.registerHelper('raw', function(value) {
+  return new handlebars.SafeString(value);
+});
+
 
 /**
  * Error handler:
@@ -76,17 +88,20 @@ exports = module.exports = function errorHandler(){
         if (e) return next(e);
         fs.readFile(__dirname + '/public/error.html', 'utf8', function(e, html){
           if (e) return next(e);
-          var stack = (err.stack || '')
-            .split('\n').slice(1)
-            .map(function(v){ return '<li>' + escapeHtml(v).replace(/  /g, ' &nbsp;') + '</li>'; }).join('');
-            html = html
-              .replace('{style}', style)
-              .replace('{stack}', stack)
-              .replace('{title}', escapeHtml(exports.title))
-              .replace('{statusCode}', res.statusCode)
-              .replace(/\{error\}/g, escapeHtml(String(err)).replace(/  /g, ' &nbsp;').replace(/\n/g, '<br>'));
+          var html;
+          try {
+            html = handlebars.compile(html)({
+              style: style,
+              title: http.STATUS_CODES[res.statusCode] || exports.title,
+              statusCode: res.statusCode,
+              error: err
+            });
             res.setHeader('Content-Type', 'text/html; charset=utf-8');
             res.end(html);
+          }
+          catch (e) {
+            next(e);
+          }
         });
       });
     // json

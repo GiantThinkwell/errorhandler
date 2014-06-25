@@ -7,7 +7,8 @@
   "repository": "expressjs/errorhandler",
   "dependencies": {
     "accepts": "~1.0.4",
-    "escape-html": "1.0.1"
+    "escape-html": "1.0.1",
+    "handlebars": "^2.0.0-alpha.4"
   },
   "devDependencies": {
     "connect": "3",

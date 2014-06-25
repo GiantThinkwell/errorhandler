@@ -13,23 +13,29 @@ body {
   color: #555;
   -webkit-font-smoothing: antialiased;
 }
+
 h1, h2 {
-  font-size: 22px;
   color: #343434;
 }
+
 h1 em, h2 em {
   padding: 0 5px;
   font-weight: normal;
 }
+
 h1 {
-  font-size: 60px;
+  font-size: 35px;
 }
+
 h2 {
-  margin-top: 10px;
+  font-size: 20px;
+  margin: 22px 0px 10px;
 }
+
 ul li {
   list-style: none;
 }
-#stacktrace {
-  margin-left: 60px;
+
+pre {
+  color: #333;
 }
